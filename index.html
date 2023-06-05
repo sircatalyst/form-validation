@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Form Validation</title>
+
+	<style>
+		.error {
+			color: red;
+		}
+	</style>
+</head>
+
+<body>
+	<form id="myForm">
+		<label for="text">Text:</label>
+		<input type="text" id="text" />
+		<span id="textError" class="error"></span><br /><br />
+
+		<label for="name">Name:</label>
+		<input type="text" id="name" />
+		<span id="nameError" class="error"></span><br /><br />
+
+		<label for="email">Email:</label>
+		<input type="email" id="email" />
+		<span id="emailError" class="error"></span><br /><br />
+
+		<label for="password">Password:</label>
+		<input type="password" id="password" />
+		<span id="passwordError" class="error"></span><br /><br />
+
+		<label for="number">Number:</label>
+		<input type="number" id="number" />
+		<span id="numberError" class="error"></span><br /><br />
+
+		<label for="date">Date:</label>
+		<input type="date" id="date" />
+		<span id="dateError" class="error"></span><br /><br />
+
+		<label for="checkbox">Checkbox:</label>
+		<input type="checkbox" id="checkbox" />
+		<span id="checkboxError" class="error"></span><br /><br />
+
+		<label for="file">File:</label>
+		<input type="file" id="file" />
+		<span id="fileError" class="error"></span><br /><br />
+
+		<label for="url">URL:</label>
+		<input type="url" id="url" />
+		<span id="urlError" class="error"></span><br /><br />
+
+		<input type="submit" value="Submit" />
+	</form>
+
+	<script>
+		// Text validation
+		var textInput = document.getElementById("text");
+		var textError = document.getElementById("textError");
+
+		textInput.addEventListener("input", function () {
+			if (textInput.value.trim() === "") {
+				textError.textContent = "Text is required";
+			} else {
+				textError.textContent = "";
+			}
+		});
+
+		// Name validation
+		var nameInput = document.getElementById("name");
+		var nameError = document.getElementById("nameError");
+
+		nameInput.addEventListener("input", function () {
+			if (nameInput.value.trim() === "") {
+				nameError.textContent = "name is required";
+			} else if (!isValidAlphabet(emailInput.value)) {
+				nameError.textContent = "Name should not contain digit";
+			} else {
+				nameError.textContent = "";
+			}
+		});
+
+		// Email validation
+		var emailInput = document.getElementById("email");
+		var emailError = document.getElementById("emailError");
+
+		emailInput.addEventListener("input", function () {
+			if (emailInput.value.trim() === "") {
+				emailError.textContent = "Email is required";
+			} else if (!isValidEmail(emailInput.value)) {
+				emailError.textContent = "Invalid email format";
+			} else {
+				emailError.textContent = "";
+			}
+		});
+
+		// Password validation
+		var passwordInput = document.getElementById("password");
+		var passwordError = document.getElementById("passwordError");
+
+		passwordInput.addEventListener("input", function () {
+			if (passwordInput.value.trim() === "") {
+				passwordError.textContent = "Password is required";
+			} else {
+				passwordError.textContent = "";
+			}
+		});
+
+		// Number validation
+		var numberInput = document.getElementById("number");
+		var numberError = document.getElementById("numberError");
+
+		numberInput.addEventListener("input", function () {
+			if (numberInput.value.trim() === "") {
+				numberError.textContent = "Number is required";
+			} else if (isNaN(numberInput.value)) {
+				numberError.textContent = "Invalid number";
+			} else {
+				numberError.textContent = "";
+			}
+		});
+
+		// Date validation
+		var dateInput = document.getElementById("date");
+		var dateError = document.getElementById("dateError");
+
+		dateInput.addEventListener("input", function () {
+			if (dateInput.value.trim() === "") {
+				dateError.textContent = "Date is required";
+			} else {
+				dateError.textContent = "";
+			}
+		});
+
+		// Checkbox validation
+		var checkboxInput = document.getElementById("checkbox");
+		var checkboxError = document.getElementById("checkboxError");
+
+		checkboxInput.addEventListener("change", function () {
+			if (!checkboxInput.checked) {
+				checkboxError.textContent = "Checkbox is required";
+			} else {
+				checkboxError.textContent = "";
+			}
+		});
+
+		// File validation
+		var fileInput = document.getElementById("file");
+		var fileError = document.getElementById("fileError");
+
+		fileInput.addEventListener("change", function () {
+			if (fileInput.files.length === 0) {
+				fileError.textContent = "File is required";
+			} else {
+				fileError.textContent = "";
+			}
+		});
+
+		// URL validation
+		var urlInput = document.getElementById("url");
+		var urlError = document.getElementById("urlError");
+
+		urlInput.addEventListener("input", function () {
+			if (urlInput.value.trim() === "") {
+				urlError.textContent = "URL is required";
+			} else if (!isValidURL(urlInput.value)) {
+				urlError.textContent = "Invalid URL format";
+			} else {
+				urlError.textContent = "";
+			}
+		});
+
+		function isValidEmail(email) {
+			// A simple email validation using regular expression
+			var emailRegex = /^\S+@\S+\.\S+$/;
+			return emailRegex.test(email);
+		}
+
+		function isValidAlphabet(email) {
+			// A simple ABC.. validation using regular expression
+			var alphabetRegex = /^[a-zA-Z]+$/;
+			return alphabetRegex.test(email);
+		}
+
+		function isValidURL(url) {
+			// A simple URL validation using regular expression
+			var urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+			return urlRegex.test(url);
+		}
+
+
+		// submit button validation 
+		var form = document.getElementById("myForm");
+
+		form.addEventListener("submit", function (event) {
+			event.preventDefault();
+
+			var inputs = form.querySelectorAll("input");
+			var isFormValid = true;
+
+			for (var i = 0; i < inputs.length; i++) {
+				var input = inputs[i];
+				if (input.value.trim() === "" || input.value === "on") {
+					isFormValid = false;
+					showErrorMessage(input, "This field is required");
+				} else {
+					removeErrorMessage(input);
+				}
+			}
+
+			if (isFormValid) {
+				// Perform form submission or other actions here
+				form.reset();
+			} else {
+				// show error
+			}
+		});
+
+		function showErrorMessage(input, message) {
+			var errorElement = input.nextElementSibling;
+
+			if (!errorElement || !errorElement.classList.contains("error")) {
+				errorElement = document.createElement("span");
+				errorElement.classList.add("error");
+				input.parentNode.appendChild(errorElement);
+			}
+
+			errorElement.textContent = message;
+		}
+
+		function removeErrorMessage(input) {
+			var errorElement = input.nextElementSibling;
+
+			if (errorElement && errorElement.classList.contains("error")) {
+				errorElement.parentNode.removeChild(errorElement);
+			}
+		}
+	</script>
+</body>
+
+</html>
